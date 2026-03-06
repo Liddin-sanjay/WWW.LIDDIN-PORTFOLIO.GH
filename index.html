@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>Liddin Portfolio</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Segoe UI;
+overflow-x:hidden;
+}
+
+/* BACKGROUND */
+
+#flowerCanvas{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+background:linear-gradient(
+180deg,
+#87ceeb 0%,
+#b3e5fc 40%,
+#c8e6c9 70%,
+#4caf50 100%
+);
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#111;
+color:white;
+padding:15px 25px;
+}
+
+.tabs button{
+background:none;
+border:none;
+color:white;
+font-size:16px;
+margin-right:15px;
+cursor:pointer;
+}
+
+.tabs button:hover{
+color:#00d4ff;
+}
+
+/* MAIN CONTENT */
+
+.container{
+padding:30px;
+position:relative;
+z-index:1;
+}
+
+.section{
+display:none;
+}
+
+.active{
+display:block;
+}
+
+/* HOME */
+
+.home img{
+width:150px;
+border-radius:50%;
+float:left;
+margin-right:20px;
+}
+
+.home p{
+font-size:17px;
+line-height:1.7;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.15);
+}
+
+/* PROFILE LAYOUT */
+
+.profile-layout{
+display:flex;
+width:100%;
+min-height:500px;
+}
+
+/* LEFT SIDEBAR */
+
+.sidebar{
+width:260px;
+background:#f1f1f1;
+padding:20px;
+border-right:1px solid #ccc;
+}
+
+/* PROFILE PHOTO */
+
+.sidebar img{
+width:120px;
+height:120px;
+border-radius:50%;
+display:block;
+margin:auto;
+margin-bottom:10px;
+box-shadow:0 0 15px rgba(0,0,0,0.2);
+}
+
+/* NAME */
+
+.sidebar h3{
+text-align:center;
+margin-bottom:25px;
+}
+
+/* TAB BUTTONS */
+
+.sidebar button{
+display:block;
+width:100%;
+padding:15px;
+border:none;
+background:none;
+text-align:left;
+cursor:pointer;
+font-size:16px;
+}
+
+.sidebar button:hover{
+background:#ddd;
+}
+
+.sidebar button.active{
+background:#ccc;
+}
+
+/* RIGHT CONTENT */
+
+.content{
+flex:1;
+padding:30px;
+background:white;
+box-shadow:0 2px 10px rgba(0,0,0,0.15);
+}
+
+.tabcontent{
+display:none;
+}
+
+/* EXPERIENCE */
+
+.exp-box{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+
+</style>
+
+<script>
+
+function showSection(id){
+
+document.querySelectorAll(".section").forEach(s=>{
+s.style.display="none";
+})
+
+document.getElementById(id).style.display="block"
+
+}
+
+function openTab(evt,tabName){
+
+let tabcontent=document.getElementsByClassName("tabcontent")
+
+for(let i=0;i<tabcontent.length;i++){
+tabcontent[i].style.display="none"
+}
+
+let buttons=document.querySelectorAll(".sidebar button")
+
+buttons.forEach(btn=>btn.classList.remove("active"))
+
+document.getElementById(tabName).style.display="block"
+
+evt.currentTarget.classList.add("active")
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<canvas id="flowerCanvas"></canvas>
+
+<header>
+
+<div class="tabs">
+<button onclick="showSection('home')">Home</button>
+<button onclick="showSection('profile')">Profile</button>
+<button onclick="showSection('experience')">Experience</button>
+</div>
+
+</header>
+
+<div class="container">
+
+<!-- HOME -->
+
+<div id="home" class="section active home">
+
+<img src="profile.jpg">
+
+<p>
+
+Hello, I am <b>V V Lidhin Sanjai</b>, a passionate developer interested in
+building intelligent systems and modern web applications using Python,
+Django and modern web technologies.
+
+</p>
+
+</div>
+
+<!-- PROFILE -->
+
+<div id="profile" class="section">
+
+<div class="profile-layout">
+
+<!-- LEFT SIDEBAR -->
+
+<div class="sidebar">
+
+<img src="profile.jpg">
+
+<h3>V V Lidhin Sanjai</h3>
+
+<button onclick="openTab(event,'contacts')" class="active">Contacts</button>
+<button onclick="openTab(event,'skills')">Skills</button>
+<button onclick="openTab(event,'education')">Education</button>
+<button onclick="openTab(event,'projects')">Projects</button>
+
+</div>
+
+<!-- RIGHT CONTENT -->
+
+<div class="content">
+
+<div id="contacts" class="tabcontent" style="display:block">
+
+<h2>Contacts</h2>
+
+<p>Phone : 9442735262</p>
+<p>Email : liddintom@gmail.com</p>
+<p>Location : Coimbatore</p>
+
+</div>
+
+<div id="skills" class="tabcontent">
+
+<h2>Skills</h2>
+
+<ul>
+<li>Python</li>
+<li>Django</li>
+<li>HTML</li>
+<li>CSS</li>
+<li>JavaScript</li>
+<li>MySQL</li>
+<li>MongoDB</li>
+</ul>
+
+</div>
+
+<div id="education" class="tabcontent">
+
+<h2>Education</h2>
+
+<p>B.E Electronics and Communication Engineering</p>
+<p>R.V.S College of Engineering and Technology</p>
+
+</div>
+
+<div id="projects" class="tabcontent">
+
+<h2>Projects</h2>
+
+<ul>
+<li>Medbulance – Flying Ambulance System</li>
+<li>Automatic Number Plate Recognition</li>
+<li>Django Shopping Website</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- EXPERIENCE -->
+
+<div id="experience" class="section">
+
+<div class="exp-box">
+
+<h3>Software Developer Internship</h3>
+<p>Elysium Academy – Coimbatore</p>
+
+</div>
+
+<div class="exp-box">
+
+<h3>System Administrator</h3>
+<p>Karpagam Jewellers – Coimbatore</p>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="animation.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>Liddin Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="favicon.png">
+
+</head>
+
+<style>
+
+body{
+margin:0;
+font-family:Segoe UI;
+overflow-x:hidden;
+}
+
+/* CANVAS BACKGROUNDS */
+
+/* HOME FLOWER */
+
+#flowerCanvas{
+position:fixed;
+top:40px;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+background:linear-gradient(
+180deg,
+white 100%,
+rgb(255, 255, 255) 100%,
+);
+}
+
+
+/* PROFILE NEURAL */
+
+#neural{
+position:fixed;
+top:40px;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+background:#0f1212;
+}
+
+
+/* EXPERIENCE MATRIX */
+
+#rain{
+position:fixed;
+top:40px;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+background:black;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+align-items:center;
+background:#02125c;
+padding:0px;
+}
+
+.tabs button{
+    margin-left: 20px;
+background:none;
+border:none;
+color:white;
+font-size:25px;
+margin-right:1px;
+ display: inline-block;
+  margin: 5px 5px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.tabs button:hover{
+background-color:#9095ee;
+color:black;
+
+}
+
+.tabs button.active{
+    background-color:#fefefe;
+color:black;
+
+}
+
+/* MAIN CONTENT */
+
+.container{
+padding:30px;
+position:relative;
+z-index:1;
+}
+
+
+.section{
+display:none;
+}
+
+.section.active{
+display:block;
+}
+
+/* HOME */
+
+.home img{
+    margin-top: 60px;
+    margin-left: 30px;
+height: 180px;
+width:150px;
+border-radius:50%;
+float:left;
+margin-right:20px;
+}
+
+.home p{
+font-size:17px,black;
+
+background:rgba(255, 255, 255, 0.8);
+padding:20px;
+
+box-shadow:0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* PROFILE */
+
+.profile-layout{
+display:flex;
+width:100%;
+min-height:500px;
+}
+
+.sidebar{
+width:260px;
+background:rgba(241,241,241,0.9);
+}
+
+.sidebar img{
+width:120px;
+height:140px;
+border-radius:50%;
+display:block;
+margin:auto;
+margin-bottom:10px;
+}
+
+.sidebar h3{
+text-align:center;
+margin-bottom:25px;
+}
+
+.sidebar button{
+display:block;
+width:100%;
+padding:15px;
+border:none;
+background:none;
+text-align:left;
+cursor:pointer;
+}
+
+.sidebar button:hover{
+background:#ddd;
+}
+
+.sidebar button.active{
+background:#ccc;
+}
+
+.content{
+  
+flex:1;
+padding:30px;
+height:450px;
+overflow:hidden;
+background:rgba(255,255,255);
+}
+
+
+#skills{
+height:100%;
+overflow-y:auto;
+}
+.tabcontent{
+display:none;
+}
+
+.tabcontent.active{
+display:block;
+}
+
+/* EXPERIENCE */
+
+.exp-box{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+
+</style>
+
+<script>
+
+/* PAGE SWITCH */
+
+function openPage(pageName,btn){
+
+document.querySelectorAll(".section").forEach(sec=>{
+sec.classList.remove("active");
+});
+
+document.querySelectorAll(".tablink").forEach(tab=>{
+tab.classList.remove("active");
+});
+
+document.getElementById(pageName).classList.add("active");
+btn.classList.add("active");
+
+/* start animations */
+
+if(pageName==="home"){
+startFlower();
+}
+
+if(pageName==="profile"){
+startNeural();
+}
+
+if(pageName==="experience"){
+startRain();
+}
+
+}
+
+/* PROFILE TABS */
+
+function openTab(evt,tabName){
+
+document.querySelectorAll(".tabcontent").forEach(tab=>{
+tab.classList.remove("active");
+});
+
+document.querySelectorAll(".sidebar button").forEach(btn=>{
+btn.classList.remove("active");
+});
+
+document.getElementById(tabName).classList.add("active");
+evt.currentTarget.classList.add("active");
+
+}
+
+window.onload=function(){
+startFlower();
+}
+
+</script>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="tabs">
+
+<button class="tablink active" onclick="openPage('home',this)">Home</button>
+<button class="tablink" onclick="openPage('profile',this)">Profile</button>
+<button class="tablink" onclick="openPage('experience',this)">Experience</button>
+
+</div>
+
+</header>
+
+<div class="container">
+
+<!-- HOME -->
+
+<div id="home" class="section active home">
+
+<canvas id="flowerCanvas"></canvas>
+
+<img src="profile.jpeg">
+
+<p>
+Hello, I am <b>V V Lidhin Sanjai</b>, a passionate developer interested in building intelligent systems and modern web applications using Python, Django and modern web technologies.
+
+<br>
+Welcome to my portfolio, a space that represents my journey of learning, creativity, and continuous exploration in the world of technology.<br>
+From the moment I started experimenting with programming and digital creation, I became fascinated by how ideas can be transformed into interactive systems and meaningful experiences.<br>
+My interest in development grew through curiosity, experimentation, and the desire to understand how complex systems work behind the scenes.<br>
+This portfolio reflects not only the projects I have built but also the dedication, persistence, and problem-solving mindset I developed along the way.<br> <br>
+Throughout my learning journey, I have explored different areas of technology including web development, interactive environments, and creative digital design.<br>
+I enjoy building projects that combine functionality with creativity, allowing users to experience both technical precision and visual engagement.<br>
+Every project I create is an opportunity to improve my skills, test new ideas, and push my limits as a developer.<br> <br>
+My experience has also involved overcoming challenges that strengthened my understanding of development and problem solving.<br>
+Debugging complex issues, optimizing performance, experimenting with new technologies, and refining design details have all been important parts of my growth.<br>
+These experiences taught me patience, persistence, and the importance of continuous learning in the ever-evolving field of technology.<br> <br>
+Key areas of experience and skills include:<br>
+• Developing responsive and dynamic web interfaces.<br>
+• Designing visually engaging user experiences and creative layouts.<br>
+• Building interactive animations and digital environments.<br>
+• Solving complex coding challenges through logical thinking and experimentation.<br>
+• Continuously learning new tools, techniques, and technologies to improve my work.<br>
+• Transforming ideas into complete functional projects through planning, coding, and refinement.<br> <br>
+I believe that technology is not only about writing code but also about creating solutions that inspire, engage, and solve real problems.<br>
+Each project in this portfolio represents a step forward in my journey and a reflection of the effort I invest in improving my abilities.<br>
+My goal is to continue learning, building innovative solutions, and contributing to meaningful technological experiences.<br> <br>
+Thank you for taking the time to explore my portfolio and learn more about my work and journey.<br>
+
+
+
+</p>
+
+</div>
+
+<!-- PROFILE -->
+
+<div id="profile" class="section">
+
+<canvas id="neural"></canvas>
+
+<div class="profile-layout">
+
+<div class="sidebar">
+
+<br><img src="profile.jpeg">
+<h3>V V Lidhin Sanjai</h3>
+
+<button onclick="openTab(event,'contacts')" class="active">Contacts</button>
+<button onclick="openTab(event,'skills')">Skills</button>
+<button onclick="openTab(event,'education')">Education</button>
+<button onclick="openTab(event,'projects')">Projects</button>
+
+</div>
+
+<div class="content">
+
+<div id="contacts" class="tabcontent active">
+<h2>Contacts</h2>
+<p>Phone : 9442735262</p>
+<p>Email : liddintom@gmail.com</p>
+<p>Location : Coimbatore</p>
+</div>
+
+<div id="skills" class="tabcontent">
+<h2>Skills</h2>
+<h1>Communication Skills</h1>
+<ul><li>Tamil</li>
+<li>English</li></ul>
+<h1>Programing Skills</h1>
+<ul>
+<li>Full Stack Developer</li>
+<li>python</li>
+<li>Django</li>
+<li>c</li>
+<li>c++</li>
+<li>HTML5</li>
+<li>CSS</li>
+<li>JavaScript</li>
+<li>MySQL</li>
+<li>MongoDB</li>
+<li>database</li>
+<li>AI & GPT(advanced)</li>
+<li>API & GITHUB</li>
+</ul>
+<h1>Computer Skills</h1>
+<u1>
+<li>Microsoft Office</li>
+<li>System Administrator</li>
+<li>Network Administrator</li>
+<li>Server Support</li>
+<li>Support Technician</li>
+<li>Coreldraw</li>
+<li>Visual Basis</li>
+</u1>
+
+</div>
+
+<div id="education" class="tabcontent">
+<h2>Education</h2>
+<p>B.E Electronics and Communication Engineering</p>
+<p>R.V.S College of Engineering and Technology</p>
+</div>
+
+<div id="projects" class="tabcontent">
+<h2>Projects</h2>
+<ul>
+<li>Medbulance – Flying Ambulance System</li>
+<li>Automatic Number Plate Recognition</li>
+<li>Django Shopping Website</li>
+</ul>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- EXPERIENCE -->
+
+<div id="experience" class="section">
+
+<canvas id="rain"></canvas>
+
+<div class="exp-box">
+<h3>Software Developer Internship</h3>
+<p>Elysium Academy – Coimbatore</p>
+</div>
+
+<div class="exp-box">
+<h3>System Administrator</h3>
+<p>Karpagam Jewellers – Coimbatore</p>
+</div>
+
+</div>
+
+</div>
+
+<script src="animation.js"></script>
+
+</body>
+</html>

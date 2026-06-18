@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liddin Portfolio</title>
+    <link rel="icon" type="image/png" href="profile.jpeg" />
+    <style>
+        /* ---- RESET & BASE ---- */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: #0f1212;
+        }
+
+        /* ---- CANVAS BACKGROUNDS ---- */
+        #flowerCanvas {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 60px);
+            z-index: -1;
+            background: linear-gradient(180deg, #ffffff 0%, #f0f4ff 100%);
+            display: block;
+        }
+        #neural {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 60px);
+            z-index: -1;
+            background: #0f1212;
+            display: block;
+        }
+        #rain {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 60px);
+            z-index: -1;
+            background: #000000;
+            display: block;
+        }
+        #cyberCanvas {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 60px);
+            z-index: -1;
+            background: #020010;
+            display: block;
+        }
+
+        /* ---- HEADER ---- */
+        header {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            background: #02125c;
+            padding: 0 10px;
+            position: relative;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .tabs {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .tabs button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            padding: 8px 18px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.3s, color 0.3s;
+            font-weight: 500;
+        }
+        .tabs button:hover {
+            background: #6ddbf6;
+            color: #000;
+        }
+        .tabs button.active {
+            background: #fefefe;
+            color: #000;
+        }
+
+        .header-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-right: 6px;
+        }
+        .profile-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+            cursor: pointer;
+            background: #ccc;
+        }
+        .menu-btn {
+            font-size: 30px;
+            color: #fff;
+            cursor: pointer;
+            user-select: none;
+            line-height: 1;
+            padding: 0 4px;
+        }
+
+        /* ---- DROPDOWN ---- */
+        .dropdown {
+            position: absolute;
+            right: 12px;
+            top: 60px;
+            background: #fff;
+            min-width: 170px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+            border-radius: 8px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        .dropdown a {
+            display: block;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: #222;
+            font-weight: 500;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+        .dropdown a:last-child {
+            border-bottom: none;
+        }
+        .dropdown a:hover {
+            background: #eef5ff;
+            color: #02125c;
+        }
+
+        /* ---- MAIN CONTAINER ---- */
+        .container {
+            padding: 30px 25px;
+            position: relative;
+            z-index: 1;
+            /* max-width: 1200px; */
+              max-width: 85%;
+              width: 85%;
+            margin: 0 auto;
+        }
+        .section {
+            display: none;
+            animation: fadeUp 0.5s ease;
+        }
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ---- HOME ---- */
+        .home img {
+            position: relative;
+            z-index: 10;
+            margin-top: 20px;
+            margin-left: 0;
+            height: 180px;
+            width: 150px;
+            border-radius: 50%;
+            float: left;
+            margin-right: 28px;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            object-fit: cover;
+        }
+        .home p {
+            font-size: 17px;
+            line-height: 1.7;
+            background: rgba(255, 255, 255, 0.88);
+            padding: 28px 32px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+            backdrop-filter: blur(2px);
+            color: #1a1a1a;
+            margin: 0;
+        }
+        .home p a {
+            color: #02125c;
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 2px solid #02125c;
+        }
+        .home p a:hover {
+            color: #6ddbf6;
+            border-color: #6ddbf6;
+        }
+
+        /* ---- PROFILE LAYOUT ---- */
+        .profile-layout {
+            display: flex;
+            width: 100%;
+            min-height: 500px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.20);
+        }
+        .sidebar {
+            width: 22%;
+            background: rgba(241, 241, 241, 0.92);
+            backdrop-filter: blur(4px);
+            padding: 20px 0 10px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .sidebar img {
+            width: 110px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto 10px auto;
+            border: 3px solid #02125c;
+            background: #ddd;
+        }
+        .sidebar h3 {
+            text-align: center;
+            margin: 0 0 18px 0;
+            color: #02125c;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        /* --- contact details in sidebar --- */
+        .sidebar-contact {
+            width: 90%;
+            background: rgba(255,255,255,0.5);
+            border-radius: 12px;
+            padding: 12px 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #1a1a1a;
+            border: 1px solid rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .sidebar-contact strong {
+            color: #02125c;
+        }
+        .sidebar-contact p {
+            margin: 4px 0;
+        }
+        /* ---- horizontal tabs inside content (skills/education) ---- */
+        .content-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 6px;
+        }
+        .content-tabs button {
+            background: none;
+            border: none;
+            padding: 18px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #444;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            transition: background 0.2s, color 0.2s;
+        }
+        .content-tabs button:hover {
+            background: #d0d9ff;
+        }
+        .content-tabs button.active {
+            background: #02125c;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+        }
+        /* remove old sidebar buttons */
+        .sidebar button {
+            display: none;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px 35px;
+            min-height: 460px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(4px);
+            overflow-y: auto;
+        }
+        .tabcontent {
+            display: none;
+            animation: fadeUp 0.35s ease;
+        }
+        .tabcontent.active {
+            display: block;
+        }
+        .tabcontent h2 {
+            color: #02125c;
+            border-bottom: 3px solid #02125c;
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+        .tabcontent ul {
+            padding-left: 22px;
+            line-height: 1.8;
+        }
+        .tabcontent ul li {
+            margin-bottom: 4px;
+        }
+
+        /* ---- EXPERIENCE & PROJECT ---- */
+        .exp-box, .project-box {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(4px);
+            padding: 22px 28px;
+            margin-bottom: 20px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+            transition: transform 0.2s;
+        }
+        .exp-box:hover, .project-box:hover {
+            transform: translateY(-3px);
+        }
+        .exp-box h1, .project-box h1 {
+            color: #02125c;
+            margin: 0 0 4px 0;
+            font-size: 24px;
+        }
+        .exp-box p, .project-box p {
+            margin: 4px 0;
+            color: #222;
+            font-size: 16px;
+        }
+        .exp-box p:first-of-type {
+            color: #555;
+            font-weight: 500;
+        }
+
+        /* ---- PROJECT LAYOUT (with vertical sub-tabs) ---- */
+        .project-layout {
+            display: flex;
+            width: 100%;
+            min-height: 530px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.20);
+        }
+        .project-sidebar {
+            width: 22%;
+            /* min-width0px; */
+
+            background: rgba(241, 241, 241, 0.92);
+            backdrop-filter: blur(4px);
+            padding: 20px 0 10px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .project-sidebar h3 {
+            text-align: center;
+            margin: 0 0 18px 0;
+            color: #02125c;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .project-sidebar button {
+            display: block;
+            width: 90%;
+            padding: 12px 10px;
+            border: none;
+            background: none;
+            text-align: center;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            border-radius: 8px;
+            margin: 3px 0;
+            transition: background 0.25s, color 0.25s;
+        }
+        .project-sidebar button:hover {
+            background: #d0d9ff;
+        }
+        .project-sidebar button.active {
+            background: #02125c;
+            color: #fff;
+        }
+
+        .project-content {
+            flex: 1;
+            padding: 30px 35px;
+
+            /* min-width: 1000px; */
+            min-height: 530px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(4px);
+            overflow-y: auto;
+            max-height: 500px;
+        }
+        /* ---- Custom Scrollbar for Project Content Box ---- */
+        .project-content::-webkit-scrollbar {
+            width: 10px;
+        }
+        .project-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+        }
+        .project-content::-webkit-scrollbar-thumb {
+            background: #6ddbf6;
+            border-radius: 8px;
+        }
+        .project-content::-webkit-scrollbar-thumb:hover {
+            background: #3f36f3;
+        }
+
+        .project-tabcontent {
+            display: none;
+            animation: fadeUp 0.35s ease;
+        }
+        .project-tabcontent.active {
+            display: block;
+        }
+        .project-tabcontent h2 {
+            color: #02125c;
+            border-bottom: 3px solid #02125c;
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+        .project-tabcontent p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #1a1a1a;
+        }
+        .project-tabcontent ul {
+            padding-left: 22px;
+            line-height: 1.8;
+        }
+        .project-tabcontent ul li {
+            margin-bottom: 4px;
+        }
+        .project-tabcontent img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 12px;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            border: 2px solid #02125c;
+        }
+        .container_project{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .container_project img {
+           width: auto;
+           height: auto;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 820px) {
+            .profile-layout {
+                flex-direction: column;
+                min-height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 16px 12px;
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+                gap: 4px;
+            }
+            .sidebar img {
+                width: 70px;
+                height: 85px;
+                margin: 0 12px 0 0;
+            }
+            .sidebar h3 {
+                margin: 0 18px 0 0;
+                font-size: 16px;
+                align-self: center;
+            }
+            .sidebar-contact {
+                width: auto;
+                padding: 6px 14px;
+                margin: 0 10px 0 0;
+                font-size: 13px;
+            }
+            .content {
+                padding: 20px;
+                min-height: 280px;
+            }
+            .content-tabs button {
+                padding: 6px 14px;
+                font-size: 14px;
+            }
+
+            .project-layout {
+                flex-direction: column;
+                min-height: auto;
+            }
+            .project-sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 16px 12px;
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+                gap: 4px;
+            }
+            .project-sidebar h3 {
+                margin: 0 18px 0 0;
+                font-size: 16px;
+                align-self: center;
+            }
+            .project-sidebar button {
+                width: auto;
+                padding: 8px 16px;
+                font-size: 14px;
+                margin: 2px;
+            }
+            .project-content {
+                padding: 20px;
+                min-height: 280px;
+                max-height: none;
+            }
+
+            .home img {
+                float: none;
+                display: block;
+                margin: 0 auto 20px auto;
+                height: 150px;
+                width: 130px;
+            }
+            .home p {
+                padding: 18px 20px;
+                font-size: 15px;
+            }
+            .tabs button {
+                font-size: 15px;
+                padding: 6px 12px;
+            }
+            header {
+                padding: 0 6px;
+            }
+            .container {
+                padding: 18px 14px;
+            }
+            #flowerCanvas,
+            #neural,
+            #rain,
+            #cyberCanvas {
+                top: 60px;
+                height: calc(100% - 60px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tabs button {
+                font-size: 13px;
+                padding: 5px 8px;
+            }
+            .header-right {
+                gap: 6px;
+            }
+            .profile-icon {
+                width: 30px;
+                height: 30px;
+            }
+            .menu-btn {
+                font-size: 26px;
+            }
+            .sidebar img {
+                width: 55px;
+                height: 65px;
+                margin: 0 8px 0 0;
+            }
+            .sidebar h3 {
+                font-size: 14px;
+                margin: 0 10px 0 0;
+            }
+            .sidebar-contact {
+                font-size: 12px;
+                padding: 4px 10px;
+            }
+            .content {
+                padding: 14px;
+            }
+            .content-tabs button {
+                padding: 4px 10px;
+                font-size: 13px;
+            }
+            .project-sidebar h3 {
+                font-size: 14px;
+                margin: 0 10px 0 0;
+            }
+            .project-content {
+                padding: 14px;
+            }
+            .exp-box, .project-box {
+                padding: 16px 18px;
+            }
+            .exp-box h1, .project-box h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="tabs">
+            <button class="tablink" onclick="openPage('home',this)">Home</button>
+            <button class="tablink active" onclick="openPage('profile',this)">Profile</button>
+            <button class="tablink" onclick="openPage('experience',this)">Experience</button>
+            <button class="tablink" onclick="openPage('project',this)">Project</button>
+        </div>
+
+        <div class="header-right">
+            <img src="profile.jpeg" class="profile-icon" alt="profile" />
+            <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        </div>
+
+        <div id="dropdownMenu" class="dropdown">
+            <a href="#">Details</a>
+            <a href="#">Certificate</a>
+            <a href="#">News</a>
+        </div>
+    </header>
+
+    <!-- ===== MAIN ===== -->
+    <div class="container">
+
+        <!-- HOME -->
+        <div id="home" class="section home">
+            <canvas id="flowerCanvas"></canvas>
+            <img src="profile.jpeg" alt="Lidhin" />
+            <p>
+                Hello, I am <b>V V Lidhin Sanjai</b>, a passionate developer interested in building intelligent systems and modern web applications using Python, Django and modern web technologies.<br><br>
+                Welcome to my portfolio, a space that represents my journey of learning, creativity, and continuous exploration in the world of technology.
+                From the moment I started experimenting with programming and digital creation, I became fascinated by how ideas can be transformed into interactive systems and meaningful experiences.<br><br>
+
+
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;click here to view&nbsp;&nbsp;➡️ <a href="Lidhin_Sanjai_Resume.pdf"><b>Resume</b></a> ⬅️<br><br>
+                My interest in development grew through curiosity, experimentation, and the desire to understand how complex systems work behind the scenes.<br>
+                This portfolio reflects not only the projects I have built but also the dedication, persistence, and problem-solving mindset I developed along the way.<br><br>
+                Throughout my learning journey, I have explored different areas of technology including web development, interactive environments, and creative digital design.<br>
+                I enjoy building projects that combine functionality with creativity, allowing users to experience both technical precision and visual engagement.<br>
+                Every project I create is an opportunity to improve my skills, test new ideas, and push my limits as a developer.<br><br>
+                My experience has also involved overcoming challenges that strengthened my understanding of development and problem solving.<br>
+                Debugging complex issues, optimizing performance, experimenting with new technologies, and refining design details have all been important parts of my growth.<br>
+                These experiences taught me patience, persistence, and the importance of continuous learning in the ever-evolving field of technology.<br><br>
+                <b>Key areas of experience and skills include:</b><br>
+                • Developing responsive and dynamic web interfaces.<br>
+                • Designing visually engaging user experiences and creative layouts.<br>
+                • Building interactive animations and digital environments.<br>
+                • Solving complex coding challenges through logical thinking and experimentation.<br>
+                • Continuously learning new tools, techniques, and technologies to improve my work.<br>
+                • Transforming ideas into complete functional projects through planning, coding, and refinement.<br><br>
+                I believe that technology is not only about writing code but also about creating solutions that inspire, engage, and solve real problems.<br>
+                Each project in this portfolio represents a step forward in my journey and a reflection of the effort I invest in improving my abilities.<br>
+                My goal is to continue learning, building innovative solutions, and contributing to meaningful technological experiences.<br><br>
+                Thank you for taking the time to explore my portfolio and learn more about my work and journey.
+            </p>
+        </div>
+
+        <!-- PROFILE -->
+        <div id="profile" class="section active">
+            <canvas id="neural"></canvas>
+            <div class="profile-layout">
+                <div class="sidebar">
+                    <img src="profile.jpeg" alt="Lidhin" />
+                    <h3>V V Lidhin Sanjai</h3>
+                    <!-- Contact details moved here -->
+                    <div class="sidebar-contact">
+                        <p><strong>📞 9442735262</strong> </p>
+                        <p><strong>✉️ liddintom@gmail.com</strong> </p>
+                        <p><strong>📍 Coimbatore</strong> </p>
+                        <p><strong>🪪<a href="https://liddin-sanjay.github.io/WWW.Lidhin_Sanjai_Resume.GH/"><b>Download Resume:</b></a> </strong> </p>
+
+                    </div>
+                    <!-- old buttons removed, now hidden via CSS -->
+                </div>
+                <div class="content">
+                    <!-- horizontal tabs: Skills & Education -->
+                    <div class="content-tabs">
+                        <button onclick="openContentTab(event,'skills')" class="active">Skills</button>
+                        <button onclick="openContentTab(event,'education')">Education</button>
+                    </div>
+                    <!-- Skills (active by default) -->
+                    <div id="skills" class="tabcontent active">
+                        <h2>Skills</h2>
+                        <h3>Communication Skills:</h3>
+                        <ul><li>Tamil</li><li>English</li></ul>
+                        <h3>Programming Skills:(Full Stack Developer)</h3>
+                        <ul>
+                            <li><strong>Languages:</strong> Python, C, C++, HTML5, CSS, JavaScript</li>
+                            <li><strong>Data &amp; Management:</strong> Django, MySQL, MongoDB, Database, AI &amp; GPT (advanced), API &amp; GitHub</li>
+                            <li><strong>Computer Skills:</strong> Microsoft Office, CorelDRAW, Visual Basic</li>
+                            <li><strong>Administrator Skills:</strong> System Administrator, Network Administrator, Server Support, Support Technician</li>
+                            <li><strong>Tools:</strong> ChatGpt,DeepSeek,LabelMe,Google Gemini,Pandas,Torch,Schmit,Yolo,Numpy</li>
+
+                        </ul>
+                    </div>
+                    <!-- Education -->
+                    <div id="education" class="tabcontent">
+                        <h2>Education</h2>
+                        <p><strong>B.E Electronics and Communication Engineering</strong><br />R.V.S College of Engineering and Technology</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPERIENCE -->
+        <div id="experience" class="section">
+            <canvas id="rain"></canvas>
+            <div class="exp-box">
+                <h1>Software Developer</h1>
+                <p>(3 months)</p>
+                <p>Texa Innovates – Coimbatore</p>
+            </div>
+            <div class="exp-box">
+                <h1>Software Developer Internship</h1>
+                <p>(6 months)</p>
+                <p>Elysium Academy – Coimbatore</p>
+            </div>
+            <div class="exp-box">
+                <h1>System Administrator</h1>
+                <p>(1 year)</p>
+                <p>Karpagam Jewellers – Coimbatore</p>
+            </div>
+        </div>
+
+        <!-- PROJECT (with vertical sub-tabs & scrollable content) -->
+        <div id="project" class="section">
+            <canvas id="cyberCanvas"></canvas>
+            <div class="project-layout">
+                <div class="project-sidebar">
+                    <h3>My Projects</h3>
+                    <button onclick="openProjectTab(event,'project1')" class="active">Project 1</button>
+                    <button onclick="openProjectTab(event,'project2')">Project 2</button>
+                    <button onclick="openProjectTab(event,'project3')">Project 3</button>
+                    <button onclick="openProjectTab(event,'project4')">Project 4</button>
+                    <button onclick="openProjectTab(event,'project5')">Project 5</button>
+                    <button onclick="openProjectTab(event,'project6')">Project 6</button>
+                </div>
+                <div class="project-content">
+
+                    <!-- PROJECT 1 – Thread I (Texas Innovates) -->
+                    <div id="project1" class="project-tabcontent active">
+                        <h2>Thread I – Material Identifier & Defect Detection</h2>
+                        <p><strong>Texas Innovates – AI & ML Project</strong></p>
+                        <p>An advanced computer vision system developed to identify materials and detect surface defects in industrial manufacturing. This AI-powered solution uses image processing and deep learning to classify materials and spot anomalies in real-time.</p>
+                        <ul>
+                            <li><strong>Technologies:</strong> Python, OpenCV, Deep Learning (CNN), TensorFlow / Keras</li>
+                            <li><strong>Features:</strong> Real-time material classification, automated defect detection, high-accuracy model trained on industrial datasets, integration-ready for production lines</li>
+                            <li><strong>Role:</strong> Worked as Senior in model development, data preprocessing, and testing</li>
+                        </ul>
+
+                            <h2>Thread Cops</h2>
+                        <div class="container_project">
+                        <img src="thread.jpeg" alt="My Photo" />
+                        <div>
+                            <!-- <h2>(GOOD)(GOOD)(GOOD)(GOOD)</h2> -->
+                             <p>
+                              This Img contains 4 Thread Cops
+                             </p>
+                          </div>
+
+                        </div>
+                        <h2></h2>
+
+                        <div class="container_project">
+                         <img src="fgood.bmp" alt="My Photo" />
+                          <div>
+                            <h2>(GOOD)(GOOD)(GOOD)(GOOD)</h2>
+                             <p>
+                              All four thread cops are not defect</p>
+                          </div>
+                        </div>
+
+                         <div class="container_project">
+                          <div>
+                            <h2>(BAD)(GOOD)(GOOD)(GOOD)</h2>
+                             <p>
+                               thread cop 1 is defect ,thread cop 2,3,4 are not defect.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            
+                          </div>
+                         <img src="mx.bmp" alt="My Photo" />
+                        </div>
+
+                         <div class="container_project">
+                         <img src="fbad.bmp" alt="My Photo"/>
+                          <div>
+                            <h2>(BAD)(BAD)(BAD)(BAD)</h2>
+                             <p>
+                              All four thread cops are defect 
+                             </p>
+                          </div>
+                        </div>
+                        
+                         <div class="container_project">
+                          <div>
+                            <h2>(BAD)(BAD)(BAD)(BAD)</h2>
+                             <p>
+                              All four thread cops are defect.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p> 
+                             
+                          </div>
+                         <img src="fbad1.bmp" alt="My Photo" />
+
+                        </div>
+                        
+                    </div>
+
+                    <!-- PROJECT 2 – Sliver (Texas Innovates) -->
+                    <div id="project2" class="project-tabcontent">
+                        <h2>Sliver – Material, Color Identifier & Defect Detection</h2>
+                        <p><strong>Texas Innovates (3 Months) – AI & ML Project</strong></p>
+                        <p>An enhanced version of the material identification system that adds <strong>color recognition</strong> to the analysis. This project extends defect detection capabilities by also identifying material types and their exact color properties, ideal for quality control in textile, plastic, and metal industries.</p>
+                        <ul>
+                            <li><strong>Technologies:</strong> Python, OpenCV, Color Detection Algorithms, Deep Learning &amp; Computer Vision</li>
+                            <li><strong>Features:</strong> Material classification with color identification, defect detection with visual highlighting, automated quality control reporting, scalable for different material types</li>
+                            <li><strong>Role:</strong> Worked as Senior and Contributed to automation and image-processing workflows</li>
+                        </ul>
+                        <h2>Sliver</h2>
+                        <div class="container_project">
+                         <img src="goods.jpeg" alt="My Photo"/>
+                          <div>
+                            
+                             <p>
+                              All four thread cops are defect 
+                             </p>
+                          </div>
+                        </div>
+                        <h2></h2>
+
+                         <div class="container_project">
+                          <div>
+                          <h2>Colour Matched for ALL slivers</h2>
+
+                            <!-- <h2></h2> -->
+                             <p>
+                              All Eight slivers are Good.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p> 
+                             
+                          </div>
+                         <img src="goods1.bmp" alt="My Photo" />
+
+                        </div>
+                        <div class="container_project">
+                         <img src="whited.bmp" alt="My Photo"/>
+                          <div>
+                            <h2>7th is BAD</h2>
+                             <p>
+                            7th sliver is different colour and 1,2,3,4,5,6,8 is Expected colour
+                             </p>
+                          </div>
+                        </div>
+                        
+                    </div>
+
+                    <!-- PROJECT 3 – Medbulance (was Project 1) -->
+                    <div id="project3" class="project-tabcontent">
+                        <h2>Medbulance – Flying Ambulance System</h2>
+                        <p>An innovative emergency response system using drones for rapid medical aid. This project combines drone technology with real-time medical support to reach patients in critical situations faster than traditional ambulances.</p>
+                        <ul>
+                            <li>Uses AI for route optimization</li>
+                            <li>Real-time patient monitoring</li>
+                            <li>Automated drone dispatch system</li>
+                        </ul>
+                    </div>
+
+                    <!-- PROJECT 4 – ANPR (was Project 2) -->
+                    <div id="project4" class="project-tabcontent">
+                        <h2>Automatic Number Plate Recognition</h2>
+                        <p>AI-powered system to detect and read vehicle license plates from images and video streams. Built with computer vision and deep learning.</p>
+                        <ul>
+                            <li>YOLO-based detection</li>
+                            <li>OCR for character recognition</li>
+                            <li>Real-time processing</li>
+                        </ul>
+                    </div>
+
+                    <!-- PROJECT 5 – Django Shopping (was Project 3) -->
+                    <div id="project5" class="project-tabcontent">
+                        <h2>Django Shopping Website</h2>
+                        <p>Full-featured e‑commerce platform built with Django, MySQL, and Bootstrap. Includes user authentication, product management, cart, and payment integration.</p>
+                        <ul>
+                            <li>User authentication &amp; profiles</li>
+                            <li>Product catalog &amp; search</li>
+                            <li>Shopping cart &amp; checkout</li>
+                        </ul>
+                    </div>
+
+                    <!-- PROJECT 6 – Placeholder -->
+                    <div id="project6" class="project-tabcontent">
+                        <h2>WEB-SEARCH</h2>
+                        <p>this is a Web Browser</p>
+                        <ul>
+                            <li>Used HTML,CSS,API</li>
+                            <li>Free API Search Engine is used ,which is published by gogle</li>
+                            <li>This Web Browser is a basic model of browers which can be used to search</li>
+                            <li><strong><a href="https://liddin-sanjay.github.io/WWW.WEB-SEARCH.GH/"><b>Click Link to Visit Project:</b></a> </strong></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ===== PAGE LOGIC ===== -->
+    <!-- ============================================================ -->
+    <script>
+        /* ---- DROPDOWN ---- */
+        function toggleMenu() {
+            var m = document.getElementById('dropdownMenu');
+            m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+        }
+        document.addEventListener('click', function(e) {
+            var menu = document.getElementById('dropdownMenu');
+            var btn = document.querySelector('.menu-btn');
+            if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
+
+        /* ---- PAGE SWITCH ---- */
+        function openPage(pageName, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tablink').forEach(t => t.classList.remove('active'));
+            document.getElementById(pageName).classList.add('active');
+            btn.classList.add('active');
+
+            if (pageName === 'home') startFlower();
+            else if (pageName === 'profile') startNeural();
+            else if (pageName === 'experience') startRain();
+            else if (pageName === 'project') startCyber();
+        }
+
+        /* ---- PROFILE CONTENT TABS (horizontal) ---- */
+        function openContentTab(evt, tabName) {
+            // hide all tabcontent inside .content
+            const content = evt.currentTarget.closest('.content');
+            content.querySelectorAll('.tabcontent').forEach(t => t.classList.remove('active'));
+            content.querySelectorAll('.content-tabs button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        /* ---- PROJECT SUB-TABS ---- */
+        function openProjectTab(evt, tabName) {
+            document.querySelectorAll('.project-tabcontent').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.project-sidebar button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        /* ================================================================
+           START ON LOAD & VISIBILITY
+           ================================================================ */
+        window.onload = function() {
+            startNeural();
+        };
+
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                var active = document.querySelector('.section.active');
+                if (active) {
+                    var id = active.id;
+                    if (id === 'home') startFlower();
+                    else if (id === 'profile') startNeural();
+                    else if (id === 'experience') startRain();
+                    else if (id === 'project') startCyber();
+                }
+            }
+        });
+    </script>
+
+    <!-- ===== EXTERNAL ANIMATIONS ===== -->
+    <script src="ani1.js"></script>
+
+</body>
+</html>

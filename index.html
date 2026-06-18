@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liddin Portfolio</title>
+
+<style>
+
+body{
+margin:0;
+overflow:hidden;
+font-family:Segoe UI;
+background:linear-gradient(180deg,#a8e6ff,#ffd6e7,#ffe6a7);
+}
+
+/* Start Button */
+#startBtn{
+position:fixed;
+left:50%;
+top:60%;
+transform:translate(-50%,-50%);
+padding:14px 34px;
+font-size:18px;
+border:none;
+border-radius:32px;
+background:black;
+color:white;
+cursor:pointer;
+z-index:30;
+box-shadow:0 0 25px rgba(0,0,0,0.4);
+transition:0.3s;
+}
+
+#startBtn:hover{
+transform:translate(-50%,-50%) scale(1.05);
+}
+
+/* Speech line center */
+#voiceLine{
+position:fixed;
+top:48%;
+left:50%;
+transform:translate(-50%,-50%);
+width:300px;
+height:100px;
+z-index:10;
+}
+
+/* Caption */
+.voiceCaption{
+position:fixed;
+top:68%;
+left:50%;
+transform:translateX(-50%);
+color:#1a1d1e;
+font-size:30px;
+opacity:0;
+text-align:center;
+text-shadow:0 0 18px #00ffff;
+z-index:10;
+}
+
+/* Caption animation */
+
+@keyframes fadeIn{
+from{opacity:0; transform:translate(-50%,10px);}
+to{opacity:1; transform:translate(-50%,0);}
+}
+
+@keyframes fadeOut{
+from{opacity:1;}
+to{opacity:0; transform:translate(-50%,-10px);}
+}
+
+.captionIn{
+animation:fadeIn 1.2s forwards;
+}
+
+.captionOut{
+animation:fadeOut 1.2s forwards;
+}
+
+/* Canvas background */
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+}
+
+</style>
+</head>
+
+<body>
+
+<button id="startBtn">Enter</button>
+
+<canvas id="voiceLine"></canvas>
+
+<div class="voiceCaption"></div>
+
+<canvas id="bgCanvas"></canvas>
+
+<script>
+
+/* Background canvas */
+
+const bgCanvas=document.getElementById("bgCanvas");
+const ctx=bgCanvas.getContext("2d");
+
+let W,H;
+
+function resize(){
+W=bgCanvas.width=window.innerWidth;
+H=bgCanvas.height=window.innerHeight;
+}
+
+window.addEventListener("resize",resize);
+resize();
+
+/* Particles */
+
+let particles=[];
+for(let i=0;i<220;i++){
+
+particles.push({
+x:Math.random()*W,
+y:Math.random()*H,
+r:Math.random()*2.5+0.5,
+speed:Math.random()*0.9+0.2,
+hue:Math.random()*360
+});
+
+}
+
+/* Mouse effect */
+
+let mouse={x:W/2,y:H/2};
+
+window.addEventListener("mousemove",e=>{
+mouse.x=e.clientX;
+mouse.y=e.clientY;
+});
+
+/* Voice state */
+
+let isSpeaking=false;
+
+const captionDiv=document.querySelector(".voiceCaption");
+
+/* Caption functions */
+
+function showCaption(text){
+
+captionDiv.classList.remove("captionOut");
+captionDiv.classList.add("captionIn");
+captionDiv.innerText=text;
+
+}
+
+function hideCaption(){
+
+captionDiv.classList.remove("captionIn");
+captionDiv.classList.add("captionOut");
+
+}
+
+/* AI Speech */
+
+function speakAI(){
+
+let text="HELLO Ladies and Gentlemen\nWelcome to my portfolio";
+
+let speech=new SpeechSynthesisUtterance(text);
+
+speech.lang="en-US";
+speech.rate=0.9;
+speech.pitch=1.2;
+speech.volume=1;
+
+speech.onstart=()=>{
+
+isSpeaking=true;
+showCaption(text);
+
+};
+
+speech.onend=()=>{
+
+isSpeaking=false;
+
+hideCaption();
+
+captionDiv.addEventListener("animationend",function redirectOnce(){
+
+captionDiv.removeEventListener("animationend",redirectOnce);
+
+setTimeout(()=>{
+
+window.location.href="portf.html";
+
+},200);
+
+});
+
+};
+
+window.speechSynthesis.cancel();
+window.speechSynthesis.speak(speech);
+
+}
+
+/* Button */
+
+const startBtn=document.getElementById("startBtn");
+
+startBtn.onclick=()=>{
+
+startBtn.style.display="none";
+speakAI();
+
+};
+
+/* Voice Wave */
+
+const waveCanvas=document.getElementById("voiceLine");
+const wctx=waveCanvas.getContext("2d");
+
+waveCanvas.width=260;
+waveCanvas.height=60;
+
+function waveAnimate(){
+
+wctx.clearRect(0,0,260,60);
+
+if(isSpeaking){
+
+wctx.beginPath();
+
+for(let x=0;x<260;x++){
+
+let y=30 + Math.sin(Date.now()*0.015 + x*0.35)*18 + Math.random()*3;
+
+if(x===0) wctx.moveTo(x,y);
+else wctx.lineTo(x,y);
+
+}
+
+wctx.strokeStyle="rgba(0,220,255,0.95)";
+wctx.lineWidth=2.5;
+wctx.shadowBlur=18;
+wctx.shadowColor="#00ffff";
+wctx.stroke();
+
+}
+
+requestAnimationFrame(waveAnimate);
+
+}
+
+waveAnimate();
+
+/* Background animation */
+
+function animate(){
+
+let bg=ctx.createLinearGradient(0,0,0,H);
+
+bg.addColorStop(0,"#a8e6ff");
+bg.addColorStop(0.5,"#ffd6e7");
+bg.addColorStop(1,"#ffe6a7");
+
+ctx.fillStyle=bg;
+ctx.fillRect(0,0,W,H);
+
+/* Glow center */
+
+let cx=W/2;
+let cy=H/2;
+
+let radius=160+Math.sin(Date.now()*0.002)*30;
+
+let grad=ctx.createRadialGradient(cx,cy,25,cx,cy,radius);
+
+grad.addColorStop(0,"rgba(255,70,200,0.9)");
+grad.addColorStop(1,"rgba(0,220,255,0.05)");
+
+ctx.fillStyle=grad;
+
+ctx.beginPath();
+ctx.arc(cx,cy,radius,0,Math.PI*2);
+ctx.fill();
+
+/* particles */
+
+particles.forEach(p=>{
+
+p.y-=p.speed;
+
+p.x+=Math.sin(Date.now()*0.001+p.y)*0.6 + (mouse.x-W/2)*0.0004;
+
+if(p.y<0) p.y=H;
+
+ctx.fillStyle=`hsl(${p.hue},100%,70%)`;
+
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fill();
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
